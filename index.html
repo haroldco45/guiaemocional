@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía Emocional — Escuela de Padres</title>
+
+  <!-- PWA Meta -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#5B2D8E" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Guía Emocional" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:title" content="Guía Emocional — Escuela de Padres 8vo Grado" />
+  <meta property="og:description" content="Estrategias de Regulación Emocional para padres de adolescentes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="icon-512.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== RESET & ROOT ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:    #5B2D8E;
+      --purple-lt: #7C3FAD;
+      --gold:      #F5A623;
+      --rose:      #E8455A;
+      --teal:      #00897B;
+      --sky:       #1976D2;
+      --bg:        #F7F3FF;
+      --white:     #FFFFFF;
+      --text:      #2D1B4E;
+      --muted:     #7A6A8E;
+      --radius:    18px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== SPLASH / INSTALL OVERLAY ===== */
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: linear-gradient(160deg, #5B2D8E 0%, #9C27B0 50%, #E91E63 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .splash-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; font-weight: 900;
+      color: #fff; line-height: 1.2; margin-bottom: .5rem;
+    }
+    .splash-sub { color: rgba(255,255,255,.8); font-size: 1rem; margin-bottom: 2.5rem; }
+
+    .splash-heart {
+      font-size: 5rem; margin-bottom: 1.5rem;
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100%{ transform: scale(1); }
+      50%     { transform: scale(1.15); }
+    }
+
+    #installBtnSplash {
+      background: var(--gold); color: #fff;
+      border: none; border-radius: 50px;
+      padding: 1rem 2.5rem; font-size: 1.1rem;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.25);
+      display: none; margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100%{ box-shadow: 0 6px 20px rgba(245,166,35,.4); }
+      50%     { box-shadow: 0 8px 30px rgba(245,166,35,.7); }
+    }
+
+    #skipBtn {
+      background: transparent; color: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 50px; padding: .6rem 1.8rem;
+      font-size: .95rem; font-family: 'Nunito', sans-serif;
+      cursor: pointer; transition: all .2s;
+    }
+    #skipBtn:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #5B2D8E, #9C27B0);
+      color: #fff; padding: 2rem 1.5rem 3rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    header::before {
+      content:''; position: absolute; top:-60px; right:-60px;
+      width:200px; height:200px; border-radius:50%;
+      background: rgba(255,255,255,.08);
+    }
+    header::after {
+      content:''; position: absolute; bottom:-80px; left:-40px;
+      width:250px; height:250px; border-radius:50%;
+      background: rgba(255,255,255,.06);
+    }
+
+    .header-emoji { font-size: 3rem; margin-bottom: .5rem; display: block; }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; font-weight: 900; line-height: 1.2;
+      margin-bottom: .4rem;
+    }
+    header p { font-size: .95rem; opacity: .85; }
+
+    /* ===== INSTALL BANNER (in-app) ===== */
+    #installBanner {
+      display: none;
+      background: linear-gradient(90deg, var(--gold), #FF8F00);
+      color: #fff; text-align: center; padding: .9rem 1rem;
+      font-weight: 700; font-size: .95rem; cursor: pointer;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
+    #installBanner span { font-size: 1.2rem; }
+
+    /* ===== CONTAINER ===== */
+    .container { max-width: 800px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    /* ===== SECTION TITLES ===== */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--purple);
+      margin: 2rem 0 1rem; position: relative; padding-left: 1.1rem;
+    }
+    .section-title::before {
+      content: ''; position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 5px; height: 80%; border-radius: 4px;
+      background: linear-gradient(var(--gold), var(--rose));
+    }
+
+    /* ===== INTRO CARDS ===== */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    @media(max-width:480px){ .intro-grid{ grid-template-columns: 1fr; } }
+
+    .intro-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1.2rem; box-shadow: 0 3px 12px rgba(91,45,142,.1);
+      border-top: 4px solid;
+      animation: fadeUp .5s ease both;
+    }
+    .intro-card:nth-child(1){ border-color: var(--sky); animation-delay:.1s }
+    .intro-card:nth-child(2){ border-color: var(--purple); animation-delay:.2s }
+
+    @keyframes fadeUp {
+      from{ opacity:0; transform:translateY(16px); }
+      to  { opacity:1; transform:translateY(0); }
+    }
+
+    .intro-card p { font-size: .93rem; color: var(--muted); line-height: 1.6; }
+    .intro-card strong { color: var(--text); }
+
+    /* ===== LAZARILLO BANNER ===== */
+    .lazarillo {
+      background: linear-gradient(135deg, #EDE7F6, #F3E5F5);
+      border-radius: var(--radius); padding: 1.3rem 1.5rem;
+      border-left: 5px solid var(--purple-lt);
+      font-size: .95rem; line-height: 1.7; color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    .lazarillo strong { color: var(--purple); }
+
+    /* ===== ESTRATEGIAS GRID ===== */
+    .estrategias-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media(max-width:420px){ .estrategias-grid{ grid-template-columns: 1fr; } }
+
+    .estrategia-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1.2rem; box-shadow: 0 3px 14px rgba(0,0,0,.08);
+      border-top: 5px solid;
+      transition: transform .2s, box-shadow .2s;
+      animation: fadeUp .5s ease both;
+      cursor: default;
+    }
+    .estrategia-card:active { transform: scale(.97); }
+
+    .estrategia-card:nth-child(1){ border-color: var(--sky);   animation-delay:.1s }
+    .estrategia-card:nth-child(2){ border-color: var(--teal);  animation-delay:.15s }
+    .estrategia-card:nth-child(3){ border-color: var(--rose);  animation-delay:.2s }
+    .estrategia-card:nth-child(4){ border-color: var(--purple);animation-delay:.25s }
+    .estrategia-card:nth-child(5){ border-color: var(--gold);  animation-delay:.3s }
+    .estrategia-card:nth-child(6){ border-color: #43A047;      animation-delay:.35s }
+
+    .estrategia-card .emoji { font-size: 2rem; display: block; margin-bottom: .4rem; }
+    .estrategia-card h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: .4rem; }
+    .estrategia-card p  { font-size: .87rem; color: var(--muted); line-height: 1.5; }
+
+    /* ===== BOLETÍN SECTION ===== */
+    .boletin-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-top: 1rem;
+    }
+    @media(max-width:480px){ .boletin-grid{ grid-template-columns: 1fr; } }
+
+    .boletin-card {
+      border-radius: var(--radius); padding: 1.2rem;
+      animation: fadeUp .5s ease both;
+    }
+    .boletin-no {
+      background: #FFF3F4; border: 1px solid #FFCDD2;
+      border-left: 5px solid var(--rose);
+      animation-delay: .1s;
+    }
+    .boletin-si {
+      background: #F1F8E9; border: 1px solid #DCEDC8;
+      border-left: 5px solid #7CB342;
+      animation-delay: .2s;
+    }
+    .boletin-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: .7rem; }
+    .boletin-no h3 { color: var(--rose); }
+    .boletin-si h3 { color: #558B2F; }
+    .boletin-card ul { list-style: none; }
+    .boletin-card ul li { font-size: .88rem; color: var(--muted); padding: .3rem 0; display: flex; gap: .5rem; }
+    .boletin-card ul li::before { flex-shrink: 0; }
+    .boletin-no ul li::before { content: '✗'; color: var(--rose); font-weight: 900; }
+    .boletin-si ul li::before { content: '✓'; color: #7CB342; font-weight: 900; }
+
+    /* ===== FRASES PAUSA ===== */
+    .frases-box {
+      background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
+      border-radius: var(--radius); padding: 1.3rem 1.5rem;
+      border: 1px solid #FFE082; margin-top: 1rem;
+    }
+    .frases-box h3 { font-size: 1rem; font-weight: 800; color: #F57F17; margin-bottom: .8rem; }
+    .frase {
+      background: white; border-radius: 12px; padding: .7rem 1rem;
+      margin-bottom: .6rem; font-size: .93rem; font-style: italic;
+      color: var(--text); border-left: 3px solid var(--gold);
+      box-shadow: 0 2px 6px rgba(0,0,0,.05);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center; padding: 1.5rem 1rem;
+      background: #EDE7F6; font-size: .8rem; color: var(--muted);
+    }
+    footer strong { color: var(--purple); }
+
+    /* ===== BREATHING EXERCISE ===== */
+    .breathing-btn {
+      display: block; width: 100%;
+      background: linear-gradient(135deg, var(--sky), #1565C0);
+      color: #fff; border: none; border-radius: var(--radius);
+      padding: 1rem; font-size: 1rem; font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer; margin-top: 1.5rem;
+      box-shadow: 0 4px 14px rgba(25,118,210,.35);
+      transition: transform .15s;
+    }
+    .breathing-btn:active { transform: scale(.97); }
+
+    /* Breathing overlay */
+    #breatheOverlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,5,30,.92);
+      flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 2rem;
+    }
+    #breatheOverlay.active { display: flex; }
+
+    .breathe-circle {
+      width: 140px; height: 140px; border-radius: 50%;
+      background: radial-gradient(circle, #9C27B0, #5B2D8E);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 800; color: #fff;
+      box-shadow: 0 0 40px rgba(156,39,176,.5);
+      margin-bottom: 1.5rem;
+      transition: transform 4s ease-in-out;
+    }
+    .breathe-instruction {
+      font-size: 1.5rem; color: #fff; font-weight: 700; margin-bottom: .5rem;
+    }
+    .breathe-count { font-size: 3rem; color: var(--gold); font-weight: 900; }
+    #closeBreathe {
+      margin-top: 2rem; background: transparent;
+      border: 1px solid rgba(255,255,255,.4); border-radius: 50px;
+      padding: .6rem 1.8rem; color: rgba(255,255,255,.7);
+      font-family: 'Nunito', sans-serif; cursor: pointer; font-size:.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="splash-heart">💜</div>
+  <div class="splash-logo">Guía Emocional</div>
+  <div class="splash-sub">Escuela de Padres · 8vo Grado<br>Institución Educativa Divino Niño</div>
+  <button id="installBtnSplash">📲 Instalar en mi celular</button>
+  <button id="skipBtn">Continuar sin instalar</button>
+</div>
+
+<!-- INSTALL BANNER (sticky) -->
+<div id="installBanner" onclick="triggerInstall()">
+  <span>📲</span> ¡Instala esta guía en tu celular para usarla sin internet! <span>⬇️</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <span class="header-emoji">🧠💜</span>
+  <h1>¿Qué son las Emociones?</h1>
+  <p>¿Por qué debemos regularlas? — Escuela de Padres 8vo Grado</p>
+</header>
+
+<!-- BREATHING OVERLAY -->
+<div id="breatheOverlay">
+  <div class="breathe-circle" id="breatheCircle">🌬️</div>
+  <div class="breathe-instruction" id="breatheInstruction">Prepárate</div>
+  <div class="breathe-count" id="breatheCount"></div>
+  <button id="closeBreathe" onclick="stopBreathing()">✕ Cerrar</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- INTRO -->
+  <h2 class="section-title">Las Emociones</h2>
+  <div class="intro-grid">
+    <div class="intro-card">
+      <p>Las emociones son <strong>respuestas naturales</strong> de nuestro cuerpo y mente ante situaciones cotidianas. No son buenas ni malas en sí mismas. <strong>Lo que importa es cómo las expresamos y gestionamos.</strong></p>
+    </div>
+    <div class="intro-card">
+      <p>La <strong>regulación emocional</strong> es la capacidad de reconocer lo que sentimos, comprender su origen y elegir una respuesta adecuada — en lugar de reaccionar <strong>impulsivamente.</strong></p>
+    </div>
+  </div>
+
+  <!-- LAZARILLO -->
+  <div class="lazarillo">
+    🦯 <strong>La Metáfora del Lazarillo:</strong> Como padres de adolescentes, somos el guía. Si perdemos la calma, nuestro hijo pierde la seguridad. <strong>Regularnos es el mapa para que ellos no tropiecen.</strong><br><br>
+    🏠 <em>Cuando los padres regulan sus emociones, los hijos aprenden a hacer lo mismo. <strong>El hogar es la primera escuela emocional.</strong></em>
+  </div>
+
+  <!-- ESTRATEGIAS -->
+  <h2 class="section-title">Estrategias de Regulación</h2>
+  <div class="estrategias-grid">
+    <div class="estrategia-card">
+      <span class="emoji">🌬️</span>
+      <h3>Respiración 4-7-8</h3>
+      <p>Inhala 4 seg, sostén 7, exhala 8. Repite 3 veces. Activa el sistema nervioso parasimpático.</p>
+    </div>
+    <div class="estrategia-card">
+      <span class="emoji">⏸️</span>
+      <h3>Pausa de 5 Minutos</h3>
+      <p>Antes de responder, date permiso de salir del espacio 5 min. Camina, respira, regresa.</p>
+    </div>
+    <div class="estrategia-card">
+      <span class="emoji">🧘</span>
+      <h3>Cuerpo Consciente</h3>
+      <p>Nota dónde sientes la emoción en tu cuerpo. Nombrarla la hace más manejable: "Tengo tensión en el pecho."</p>
+    </div>
+    <div class="estrategia-card">
+      <span class="emoji">🗣️</span>
+      <h3>Escucha Activa</h3>
+      <p>Silencia el celular. Mira a los ojos. No interrumpas. Repite lo que tu hijo dice: "Entonces te sentiste…"</p>
+    </div>
+    <div class="estrategia-card">
+      <span class="emoji">🫂</span>
+      <h3>Abrazo de 20 Seg</h3>
+      <p>El contacto físico libera oxitocina. Un abrazo sincero calma el sistema nervioso de ambos.</p>
+    </div>
+    <div class="estrategia-card">
+      <span class="emoji">✍️</span>
+      <h3>Escribir para Soltar</h3>
+      <p>Cuando la emoción es muy intensa, escríbela en papel. Describe lo que sientes; te da perspectiva.</p>
+    </div>
+  </div>
+
+  <!-- BOTON RESPIRACIÓN -->
+  <button class="breathing-btn" onclick="startBreathing()">
+    🌬️ Practica la Respiración 4-7-8 Ahora
+  </button>
+
+  <!-- FRASES DE PAUSA -->
+  <h2 class="section-title">Frases de Pausa 💡</h2>
+  <div class="frases-box">
+    <h3>Dilo antes de reaccionar:</h3>
+    <div class="frase">"Voy a pensar antes de responder."</div>
+    <div class="frase">"Me importas y por eso me calmo."</div>
+    <div class="frase">"Te escucho y volvemos a hablar en 10 minutos."</div>
+  </div>
+
+  <!-- BOLETÍN Y EMOCIONES -->
+  <h2 class="section-title">📋 Boletín y Emociones</h2>
+  <div class="boletin-grid">
+    <div class="boletin-card boletin-no">
+      <h3>✗ Lo que NO funciona</h3>
+      <ul>
+        <li>Reaccionar con gritos o comparaciones ("tu hermano sí puede").</li>
+        <li>Castigar de forma humillante o desproporcionada.</li>
+        <li>Ignorar el boletín sin ninguna conversación.</li>
+        <li>Culpar solo al maestro o solo al hijo.</li>
+      </ul>
+    </div>
+    <div class="boletin-card boletin-si">
+      <h3>✓ Lo que SÍ funciona</h3>
+      <ul>
+        <li>Esperar un momento de calma para revisar el boletín juntos.</li>
+        <li>Preguntar primero: "¿Cómo te sientes tú con tus notas?"</li>
+        <li>Reconocer los logros antes de hablar de lo que falta.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TIEMPO EN FAMILIA -->
+  <div class="frases-box" style="margin-top:1.2rem; background:linear-gradient(135deg,#E8F5E9,#F1F8E9); border-color:#A5D6A7;">
+    <h3 style="color:#2E7D32;">🛋️ Tiempo en Familia</h3>
+    <div class="frase" style="border-color:#7CB342;">15 minutos diarios sin pantallas: solo conversación o juego. Previene muchos conflictos emocionales.</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Institución Educativa Divino Niño — Escuela de Padres</p>
+  <p><strong>Desarrollada por Vibras Positivas HM</strong> — Derechos de Autor Reservados</p>
+</footer>
+
+<script>
+/* ============================
+   INSTALL / PWA LOGIC
+   ============================ */
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Mostrar botón en splash y banner
+  document.getElementById('installBtnSplash').style.display = 'block';
+  document.getElementById('installBanner').style.display = 'block';
+});
+
+async function triggerInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBanner').style.display = 'none';
+  }
+  deferredPrompt = null;
+}
+
+document.getElementById('installBtnSplash').addEventListener('click', async () => {
+  await triggerInstall();
+  hideSplash();
+});
+
+document.getElementById('skipBtn').addEventListener('click', hideSplash);
+
+function hideSplash() {
+  document.getElementById('splash').classList.add('hidden');
+}
+
+// Auto-ocultar splash si ya está instalada como PWA
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  hideSplash();
+  document.getElementById('installBanner').style.display = 'none';
+} else {
+  // Ocultar splash tras 4s si el usuario no interactúa
+  setTimeout(hideSplash, 4000);
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+/* ============================
+   BREATHING EXERCISE 4-7-8
+   ============================ */
+let breatheTimer = null;
+let breatheRunning = false;
+
+const phases = [
+  { label: 'Inhala', duration: 4,  scale: '1.5' },
+  { label: 'Sostén',  duration: 7,  scale: '1.5' },
+  { label: 'Exhala', duration: 8,  scale: '1'   },
+];
+
+function startBreathing() {
+  document.getElementById('breatheOverlay').classList.add('active');
+  breatheRunning = true;
+  runBreatheCycle(0, 0, 3);
+}
+
+function runBreatheCycle(phaseIdx, count, rounds) {
+  if (!breatheRunning) return;
+  if (rounds === 0) { stopBreathing(); return; }
+
+  const phase = phases[phaseIdx];
+  const circle = document.getElementById('breatheCircle');
+  const instr  = document.getElementById('breatheInstruction');
+  const cnt    = document.getElementById('breatheCount');
+
+  instr.textContent = phase.label;
+  circle.style.transform = `scale(${phase.scale})`;
+
+  let sec = phase.duration;
+  cnt.textContent = sec;
+
+  breatheTimer = setInterval(() => {
+    if (!breatheRunning) { clearInterval(breatheTimer); return; }
+    sec--;
+    cnt.textContent = sec > 0 ? sec : '';
+    if (sec <= 0) {
+      clearInterval(breatheTimer);
+      const nextPhase = (phaseIdx + 1) % phases.length;
+      const nextRounds = nextPhase === 0 ? rounds - 1 : rounds;
+      if (breatheRunning) runBreatheCycle(nextPhase, count + 1, nextRounds);
+    }
+  }, 1000);
+}
+
+function stopBreathing() {
+  breatheRunning = false;
+  clearInterval(breatheTimer);
+  const circle = document.getElementById('breatheCircle');
+  circle.style.transform = 'scale(1)';
+  document.getElementById('breatheInstruction').textContent = 'Prepárate';
+  document.getElementById('breatheCount').textContent = '';
+  document.getElementById('breatheOverlay').classList.remove('active');
+}
+</script>
+</body>
+</html>
